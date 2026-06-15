@@ -1,0 +1,58 @@
+[
+  {
+    "key": "ti_f28379d_datasheet",
+    "entry": "Texas Instruments. TMS320F2837xD Dual-Core Real-Time Microcontrollers datasheet, Rev. P[EB/OL]. 2024-02-20. https://www.ti.com/lit/ds/symlink/tms320f28379d.pdf"
+  },
+  {
+    "key": "ti_f28379d_product",
+    "entry": "Texas Instruments. TMS320F28379D data sheet, product information and support[EB/OL]. https://www.ti.com/product/TMS320F28379D"
+  },
+  {
+    "key": "ti_c2000_overview",
+    "entry": "Texas Instruments. C2000 real-time microcontrollers overview[EB/OL]. https://www.ti.com/microcontrollers-mcus-processors/c2000-real-time-control-mcus/overview.html"
+  },
+  {
+    "key": "mathworks_matlab",
+    "entry": "MathWorks. MATLAB documentation[EB/OL]. https://www.mathworks.com/help/matlab/"
+  },
+  {
+    "key": "mathworks_simulink",
+    "entry": "MathWorks. Simulink documentation[EB/OL]. https://www.mathworks.com/help/simulink/"
+  },
+  {
+    "key": "mathworks_control",
+    "entry": "MathWorks. Control System Toolbox documentation[EB/OL]. https://www.mathworks.com/help/control/"
+  },
+  {
+    "key": "mathworks_comm",
+    "entry": "MathWorks. Communications Toolbox documentation[EB/OL]. https://www.mathworks.com/help/comm/"
+  },
+  {
+    "key": "mathworks_rf",
+    "entry": "MathWorks. RF Blockset documentation[EB/OL]. https://www.mathworks.com/help/rf/"
+  },
+  {
+    "key": "mathworks_dsp",
+    "entry": "MathWorks. DSP System Toolbox documentation[EB/OL]. https://www.mathworks.com/help/dsp/"
+  },
+  {
+    "key": "mathworks_motor",
+    "entry": "MathWorks. Motor Control Blockset documentation[EB/OL]. https://www.mathworks.com/help/mcb/"
+  },
+  {
+    "key": "oppenheim_dsp",
+    "entry": "Oppenheim A V, Schafer R W. Discrete-Time Signal Processing[M]. 3rd ed. Upper Saddle River: Pearson, 2010."
+  },
+  {
+    "key": "proakis_comm",
+    "entry": "Proakis J G, Salehi M. Digital Communications[M]. 5th ed. New York: McGraw-Hill, 2008."
+  },
+  {
+    "key": "astrom_pid",
+    "entry": "Astrom K J, Hagglund T. PID Controllers: Theory, Design, and Tuning[M]. 2nd ed. Research Triangle Park: ISA, 1995."
+  },
+  {
+    "key": "friis",
+    "entry": "Friis H T. A note on a simple transmission formula[J]. Proceedings of the IRE, 1946, 34(5): 254-256."
+  }
+]

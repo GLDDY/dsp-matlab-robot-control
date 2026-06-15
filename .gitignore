@@ -1,0 +1,36 @@
+# OS/editor noise
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*.tmp
+*.bak
+
+# Word/Office lock files
+~$*.docx
+~$*.pptx
+~$*.xlsx
+
+# Python caches and local envs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# MATLAB generated caches/temp files
+*.asv
+*.m~
+slprj/
+sccprj/
+codegen/
+*.autosave
+
+# Local secrets/config
+.env
+.env.*
+*.pem
+*.key
+
+# Keep generated deliverables under output/ tracked intentionally.

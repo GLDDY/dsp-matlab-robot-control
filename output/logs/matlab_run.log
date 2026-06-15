@@ -1,0 +1,29 @@
+MATLAB simulation run started: 2026-06-15 23:28:46
+Project root: D:\resource\湘潭大学\dsp
+MATLAB version: 9.8.0.1323502 (R2020a)
+Toolbox inventory written to output/logs/toolboxes.txt
+
+[1/5] Motor control simulation...
+Motor: rise90=0.1730s, overshoot=9.55%, steady error=0.95rpm, final=-600.36rpm
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\motor_response.png
+
+[2/5] Video capture/link simulation...
+Video: raw=552.96Mbps, payload=36.24Mbps, capacity=36.47Mbps, max buffer=4.89MB, drops=0
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\video_buffer.png
+
+[3/5] RF link simulation...
+RF: min control SNR=61.56dB, min video SNR=44.76dB, BER@10dB=0
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\rf_link_ber.png
+
+[4/5] System diagrams...
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\system_architecture.png
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\motor_control_circuit.png
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\video_capture_circuit.png
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\rf_integrated_circuit.png
+Figure saved: D:\resource\湘潭大学\dsp\output\figures\software_flow.png
+
+[5/5] Simulink model generation...
+Simulink model generated: D:\resource\湘潭大学\dsp\models\robot_wireless_control_system.slx
+
+Simulation run completed: 2026-06-15 23:29:19
+Summary written to output/results/simulation_summary.json

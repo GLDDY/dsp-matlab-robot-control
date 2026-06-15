@@ -1,0 +1,1 @@
+{"sample_time_s":0.0005,"stop_time_s":2.5,"target_speed_rpm":600,"reverse_time_s":1.2,"load_step_time_s":0.75,"load_torque_nm":0.1,"rise_time_90_s":0.17300000000000001,"overshoot_percent":9.5491090312125184,"steady_speed_error_rpm":0.94788035266663739,"reverse_steady_error_rpm":10.788974774430224,"max_current_a":15,"max_pwm_duty":1,"final_speed_rpm":-600.35601394471814}

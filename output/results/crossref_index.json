@@ -1,0 +1,30 @@
+{
+  "figures": {
+    "system": 1,
+    "motor_circuit": 2,
+    "video_circuit": 3,
+    "rf_circuit": 4,
+    "software_flow": 5,
+    "simulink_top": 6,
+    "simulink_control": 7,
+    "simulink_rf": 8,
+    "motor_response": 9,
+    "video_buffer": 10,
+    "rf_ber": 11,
+    "performance_summary": 12
+  },
+  "tables": {
+    "platform": 1,
+    "motor_params": 2,
+    "video_params": 3,
+    "rf_budget": 4,
+    "deliverables": 5
+  },
+  "equations": {
+    "pid": 1,
+    "motor_model": 2,
+    "fspl": 3,
+    "noise": 4,
+    "ber": 5
+  }
+}
