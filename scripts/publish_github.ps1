@@ -22,7 +22,8 @@ if (-not $branch) {
   throw "No current git branch found."
 }
 
-if (-not (git remote get-url origin 2>$null)) {
+$remotes = @(git remote)
+if ($remotes -notcontains "origin") {
   & $Gh repo create $RepoName $visibility --source "." --remote origin --push
 } else {
   git push -u origin $branch
