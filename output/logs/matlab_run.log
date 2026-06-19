@@ -1,7 +1,30 @@
-MATLAB simulation run started: 2026-06-15 23:28:46
+MATLAB simulation run started: 2026-06-19 16:36:56
 Project root: D:\resource\湘潭大学\dsp
-MATLAB version: 9.8.0.1323502 (R2020a)
+MATLAB version: 25.1.0.2943329 (R2025a)
 Toolbox inventory written to output/logs/toolboxes.txt
+
+Simulink Agentic Toolkit - Installation Check
+===============================================
+
+Prerequisites
+  ✓ MATLAB 25.1.0.2943329 (R2025a)
+  ✓ Simulink installed and licensed
+
+MATLAB Environment
+  ✓ All 7 tool entry points on path
+  ✓ Package resolution correct (+sage, +mbd inside SATK)
+
+MCP Server
+  ✓ matlab-mcp-server.exe found: C:\Users\86155\.matlab\agentic-toolkits\bin\matlab-mcp-server.exe
+
+MCP Connectivity
+  ✓ shareMATLABSession available (MATLAB-side MCP components installed)
+  ✓ MATLAB connector running (port 31517)
+
+===============================================
+Result: PASS
+
+Agentic toolkit initialized: 1
 
 [1/5] Motor control simulation...
 Motor: rise90=0.1730s, overshoot=9.55%, steady error=0.95rpm, final=-600.36rpm
@@ -23,7 +46,8 @@ Figure saved: D:\resource\湘潭大学\dsp\output\figures\rf_integrated_circuit.
 Figure saved: D:\resource\湘潭大学\dsp\output\figures\software_flow.png
 
 [5/5] Simulink model generation...
+Simulink smoke test passed: 1
 Simulink model generated: D:\resource\湘潭大学\dsp\models\robot_wireless_control_system.slx
 
-Simulation run completed: 2026-06-15 23:29:19
+Simulation run completed: 2026-06-19 16:37:49
 Summary written to output/results/simulation_summary.json

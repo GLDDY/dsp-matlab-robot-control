@@ -1,6 +1,6 @@
 {
-  "body_cjk_chars": 9790,
-  "citations_used": 14,
+  "body_cjk_chars": 9955,
+  "citations_used": 17,
   "cross_references": {
     "figures": {
       "system": 1,
@@ -21,7 +21,8 @@
       "motor_params": 2,
       "video_params": 3,
       "rf_budget": 4,
-      "deliverables": 5
+      "agentic_toolkit": 5,
+      "deliverables": 6
     },
     "equations": {
       "pid": 1,
@@ -32,6 +33,6 @@
     }
   },
   "report_path": "D:/resource/湘潭大学/dsp/output/doc/基于MATLAB的机器人端无线控制系统设计报告.docx",
-  "summary_generated_at": "2026-06-15 23:29:18",
+  "summary_generated_at": "2026-06-19 16:37:49",
   "humanize_pass": "Applied manually during generation: removed formulaic conclusions, vague claims, inflated wording, and repeated transition patterns while preserving technical data and citation numbers."
 }

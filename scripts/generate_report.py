@@ -85,6 +85,12 @@ def load_json(path: Path) -> Dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_json_optional(path: Path) -> Dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def load_csv_rows(path: Path) -> List[Dict[str, str]]:
     if not path.exists():
         raise FileNotFoundError(f"Required simulation artifact missing: {path}")
@@ -217,6 +223,13 @@ def count_cjk(text: str) -> int:
     return len(re.findall(r"[\u4e00-\u9fff]", text))
 
 
+def release_label(version_text: str) -> str:
+    match = re.search(r"\((R\d{4}[ab])\)", version_text or "")
+    if match:
+        return match.group(1)
+    return version_text or "未记录"
+
+
 def build_report():
     DOC_DIR.mkdir(parents=True, exist_ok=True)
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -226,10 +239,13 @@ def build_report():
     video = load_json(RESULTS_DIR / "video_summary.json")
     rf = load_json(RESULTS_DIR / "rf_summary.json")
     sim_status = load_json(RESULTS_DIR / "simulink_model_status.json")
+    agentic = load_json_optional(LOGS_DIR / "agentic_toolkit_status.json")
+    architecture = load_json_optional(RESULTS_DIR / "model_architecture_review.json")
     references = json.loads(REFERENCES_PATH.read_text(encoding="utf-8"))
     cm = CitationManager(references)
     xr = CrossRefManager()
     body_parts: List[str] = []
+    matlab_release = release_label(summary.get("matlab_version", ""))
 
     # Pre-allocate labels for stable cross references.
     for key in [
@@ -247,7 +263,7 @@ def build_report():
         "performance_summary",
     ]:
         xr.fig(key)
-    for key in ["platform", "motor_params", "video_params", "rf_budget", "deliverables"]:
+    for key in ["platform", "motor_params", "video_params", "rf_budget", "agentic_toolkit", "deliverables"]:
         xr.table(key)
     for key in ["pid", "motor_model", "fspl", "noise", "ber"]:
         xr.eq(key)
@@ -304,10 +320,10 @@ def build_report():
         body_parts)
     add_figure(doc, xr, "system", "system_architecture.png", "机器人端远程无线控制系统总体结构")
     add_paragraph(doc,
-        "课程任务书原文提到 Vitis-Tutorials 的 AI 引擎开发，但本次交付明确改为 MATLAB/Simulink 设计开发。这个调整不是回避 DSP 算法，而是把课程重点落在可复现的建模、仿真和报告表达上。MATLAB R2020a 已在本机可用，且包含 Simulink、Control System Toolbox、DSP System Toolbox、Communications Toolbox、RF Blockset、Motor Control Blockset 等工具箱。与下载大型 Vitis 工具链相比，MATLAB 环境更适合在当前机器上得到确定的仿真日志和可审查的数据文件。",
+        f"课程任务书原文提到 Vitis-Tutorials 的 AI 引擎开发，但本次交付明确改为 MATLAB/Simulink 设计开发。当前仿真在 MATLAB {matlab_release} 上重新运行，并启用了 MathWorks 官方 MATLAB Agentic Toolkit、Simulink Agentic Toolkit 与 MATLAB MCP Server 初始化检查。这个调整不是把工具名写进报告，而是把课程重点落在可复现的建模、仿真和模型审查上；与下载大型 Vitis 工具链相比，MATLAB 环境更适合在当前机器上得到确定的仿真日志、模型截图和可审查的数据文件。",
         body_parts)
     add_paragraph(doc,
-        f"报告采用顺序编码制引用文献，DSP 芯片参数主要依据 TI 数据手册和产品页 {cm.cite('ti_f28379d_datasheet')}{cm.cite('ti_f28379d_product')}；控制器和通信仿真方法参考 MathWorks 工具箱文档 {cm.cite('mathworks_control')}{cm.cite('mathworks_comm')} 以及经典 DSP、通信和 PID 资料 {cm.cite('oppenheim_dsp')}{cm.cite('proakis_comm')}{cm.cite('astrom_pid')}。所有图号、表号和公式号由脚本统一登记，正文中的“见图”“见表”“由式”不是手工随意编号。",
+        f"报告采用顺序编码制引用文献，DSP 芯片参数主要依据 TI 数据手册和产品页 {cm.cite('ti_f28379d_datasheet')}{cm.cite('ti_f28379d_product')}；控制器和通信仿真方法参考 MathWorks 工具箱文档 {cm.cite('mathworks_control')}{cm.cite('mathworks_comm')} 以及经典 DSP、通信和 PID 资料 {cm.cite('oppenheim_dsp')}{cm.cite('proakis_comm')}{cm.cite('astrom_pid')}。Simulink 模型优化过程参考官方 Agentic Toolkit 和 MCP Server 资料 {cm.cite('mathworks_matlab_agentic_toolkit')}{cm.cite('mathworks_simulink_agentic_toolkit')}{cm.cite('mathworks_matlab_mcp_server')}。所有图号、表号和公式号由脚本统一登记，正文中的“见图”“见表”“由式”不是手工随意编号。",
         body_parts)
 
     add_heading(doc, "2 总体方案与DSP选型", 1)
@@ -322,7 +338,7 @@ def build_report():
             ["电机驱动", "隔离栅极驱动 + MOSFET功率桥", "便于实现正反转、制动、过流保护和 PWM 调速"],
             ["视频采集", "CMOS摄像头 + H.264编码器 + SDRAM/FIFO", "避免 DSP 承担完整视频压缩计算，保证带宽可控"],
             ["射频链路", "VHF多频段收发前端", "满足 40 MHz-200 MHz、10 km 级通信距离和控制/视频分频传输"],
-            ["仿真平台", "MATLAB/Simulink R2020a", "本机可运行，能生成真实 CSV、PNG 和日志"],
+            ["仿真平台", f"MATLAB/Simulink {matlab_release}", "本机可运行，能生成真实 CSV、PNG、Simulink模型截图和工具链日志"],
         ])
     add_paragraph(doc,
         f"TMS320F28379D 的优势在于实时控制外设完整。TI 产品资料给出的关键资源包括 200 MHz C28x CPU、CLA、PWM、ADC、QEP、SPI、SCI、CAN 和较丰富 GPIO {cm.cite('ti_c2000_overview')}。这些资源对本题很直接：PWM 用于桥式驱动器，ADC 用于电流和母线电压采样，QEP 用于编码器测速，SCI/SPI/CAN 可连接射频控制接口或视频缓存控制器。相比只追求通用计算性能的处理器，C2000 系列在电机控制里少走弯路。",
@@ -431,7 +447,7 @@ def build_report():
         body_parts)
     add_figure(doc, xr, "software_flow", "software_flow.png", "MATLAB/Simulink仿真与报告生成流程")
     add_paragraph(doc,
-        f"本机 Simulink 模型生成状态为：{sim_status.get('note', '未记录')}。模型文件位于 models/robot_wireless_control_system.slx。与上一版简单闭环块图不同，新模型按系统工程方式分层：顶层区分命令调度、DSP控制算法、PWM与隔离驱动、功率级与电机、传感采集、视频链路、射频链路和性能监测，顶层结构见 {xr.fig('simulink_top')}。",
+        f"本机 Simulink 模型生成状态为：{sim_status.get('note', '未记录')}。模型文件位于 models/robot_wireless_control_system.slx。与上一版简单闭环块图不同，新模型按系统工程方式分层：顶层区分命令调度、DSP控制算法、PWM与隔离驱动、功率级与电机、传感采集、视频缓存、VHF射频信道和性能监测，顶层结构见 {xr.fig('simulink_top')}。架构审查文件记录了 {architecture.get('block_count', sim_status.get('block_count', '未记录'))} 个 block、{architecture.get('line_count', sim_status.get('line_count', '未记录'))} 条连线和模型工作区参数，而不是只保存一张截图。",
         body_parts)
     add_figure(doc, xr, "simulink_top", "simulink_model_top.png", "机器人端无线控制系统Simulink顶层模型截图")
     add_paragraph(doc,
@@ -442,6 +458,19 @@ def build_report():
         f"视频与射频链路模型截图见 {xr.fig('simulink_rf')}。视频侧保留原始码率、H.264压缩和帧缓存占用，射频侧保留容量裕量和链路健康度估计。这个模型仍然是课程设计级抽象，并非完整物理层收发机，但它已经把系统性能评价所需的关键状态放进同一仿真框架，避免电机、视频、射频三部分各说各话。",
         body_parts)
     add_figure(doc, xr, "simulink_rf", "simulink_model_video_rf_subsystems.png", "视频/RF链路与性能监测子系统截图")
+    add_table_caption(doc, xr, "agentic_toolkit", "MathWorks Agentic Toolkit 使用与校验记录")
+    add_simple_table(doc,
+        ["项目", "实际记录", "说明"],
+        [
+            ["MATLAB版本", summary.get("matlab_version", "未记录"), "由 run_all_simulations.m 写入 simulation_summary.json"],
+            ["SATK初始化", "通过" if agentic.get("initialized") else "未通过", "由 output/logs/agentic_toolkit_status.json 记录"],
+            ["MCP Server", "存在" if agentic.get("mcp_server_exists") else "未确认", agentic.get("mcp_server_path", "未记录")],
+            ["建模技能", ", ".join(agentic.get("skills_applied", [])) or "未记录", "用于分层建模与 SimulationInput 烟雾仿真检查"],
+            ["烟雾仿真", "通过" if sim_status.get("simulation_smoke_test", {}).get("passed") else "未通过", "只验证模型可执行性，数值指标仍来自 CSV/JSON 主仿真"],
+        ])
+    add_paragraph(doc,
+        f"Agentic Toolkit 的作用是强化建模过程，而不是替代工程判断。官方工具链检查显示 SATK 初始化状态为 {'通过' if agentic.get('initialized') else '未通过'}，MCP Server 与 shareMATLABSession 的位置写入 output/logs/agentic_toolkit_status.json；Simulink 模型随后用 SimulationInput 做了 0.25 s 烟雾仿真，结果为 {'通过' if sim_status.get('simulation_smoke_test', {}).get('passed') else '未通过'}。这些记录能说明模型在 R2025a 下可加载、可更新、可短时运行，但电机响应、视频缓存和射频 BER 的报告数值仍以 run_all_simulations.m 生成的 CSV/JSON 为准。",
+        body_parts)
     add_paragraph(doc,
         "代码组织上，MATLAB 负责仿真和结果输出，Python 负责 Word 排版、引用编号和交叉引用登记。DSP C 代码只给出核心控制函数和 RF 控制包封装示例，汇编文件只展示中断入口调用 C 例程的混合编程关系。把这几类代码分开，是为了避免报告里出现“看起来什么都有、实际没有一件能复现”的问题。课程设计允许没有真实硬件，但不应允许实验数据没有来源。",
         body_parts)

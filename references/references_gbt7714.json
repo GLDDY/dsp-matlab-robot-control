@@ -40,6 +40,18 @@
     "entry": "MathWorks. Motor Control Blockset documentation[EB/OL]. https://www.mathworks.com/help/mcb/"
   },
   {
+    "key": "mathworks_matlab_agentic_toolkit",
+    "entry": "MathWorks. MATLAB Agentic Toolkit[EB/OL]. https://github.com/matlab/matlab-agentic-toolkit"
+  },
+  {
+    "key": "mathworks_simulink_agentic_toolkit",
+    "entry": "MathWorks. Simulink Agentic Toolkit[EB/OL]. https://github.com/matlab/simulink-agentic-toolkit"
+  },
+  {
+    "key": "mathworks_matlab_mcp_server",
+    "entry": "MathWorks. MATLAB MCP Server[EB/OL]. https://github.com/matlab/matlab-mcp-server"
+  },
+  {
     "key": "oppenheim_dsp",
     "entry": "Oppenheim A V, Schafer R W. Discrete-Time Signal Processing[M]. 3rd ed. Upper Saddle River: Pearson, 2010."
   },

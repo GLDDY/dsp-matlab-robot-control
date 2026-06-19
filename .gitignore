@@ -33,4 +33,7 @@ codegen/
 *.pem
 *.key
 
+# Local MathWorks toolkit installers and downloaded MCP binaries
+tools/mathworks-agentic/
+
 # Keep generated deliverables under output/ tracked intentionally.

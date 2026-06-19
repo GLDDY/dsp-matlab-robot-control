@@ -1,8 +1,11 @@
 {
   "report": "D:/resource/湘潭大学/dsp/output/doc/基于MATLAB的机器人端无线控制系统设计报告.docx",
-  "paragraphs": 155,
-  "tables": 5,
-  "body_cjk_chars": 9790,
-  "citations": 14,
+  "paragraphs": 160,
+  "tables": 6,
+  "body_cjk_chars": 9955,
+  "citations": 17,
+  "matlab_version": "25.1.0.2943329 (R2025a)",
+  "agentic_toolkit_initialized": true,
+  "simulink_smoke_test_passed": true,
   "has_replacement_char": false
 }

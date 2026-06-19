@@ -48,6 +48,7 @@ def main():
         raise AssertionError(f"Missing figures: {missing_figures}")
     required_results = [
         "simulation_summary.json",
+        "model_architecture_review.json",
         "motor_response.csv",
         "video_buffer.csv",
         "rf_link_budget.csv",
@@ -60,6 +61,18 @@ def main():
     model_path = PROJECT_ROOT / "models" / "robot_wireless_control_system.slx"
     if not model_path.exists():
         raise AssertionError(f"Missing hierarchical Simulink model: {model_path}")
+    agentic_path = LOGS_DIR / "agentic_toolkit_status.json"
+    if not agentic_path.exists():
+        raise AssertionError(f"Missing Agentic Toolkit status log: {agentic_path}")
+    summary = json.loads((RESULTS_DIR / "simulation_summary.json").read_text(encoding="utf-8"))
+    if "R2025a" not in summary.get("matlab_version", ""):
+        raise AssertionError(f"Expected MATLAB R2025a simulation, got {summary.get('matlab_version')}")
+    agentic = json.loads(agentic_path.read_text(encoding="utf-8"))
+    if not agentic.get("initialized"):
+        raise AssertionError(f"Agentic Toolkit initialization did not pass: {agentic}")
+    sim_status = json.loads((RESULTS_DIR / "simulink_model_status.json").read_text(encoding="utf-8"))
+    if not sim_status.get("simulation_smoke_test", {}).get("passed"):
+        raise AssertionError(f"Simulink smoke test did not pass: {sim_status.get('simulation_smoke_test')}")
     citations = sorted({int(n) for n in re.findall(r"\[(\d+)\]", text)})
     if len(citations) < 12:
         raise AssertionError(f"Expected at least 12 citations, found {len(citations)}")
@@ -77,6 +90,9 @@ def main():
         "tables": len(doc.tables),
         "body_cjk_chars": body_cjk,
         "citations": len(citations),
+        "matlab_version": summary.get("matlab_version", ""),
+        "agentic_toolkit_initialized": agentic.get("initialized", False),
+        "simulink_smoke_test_passed": sim_status.get("simulation_smoke_test", {}).get("passed", False),
         "has_replacement_char": False,
     }
     (LOGS_DIR / "docx_validation.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

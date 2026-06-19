@@ -1,0 +1,4 @@
+{
+  "confirmedNone": true,
+  "reason": "This coursework package uses built-in Simulink, Simscape-ready modeling patterns, MATLAB scripts, and generated project figures only; no project-specific reusable Simulink library is available."
+}
