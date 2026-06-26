@@ -467,6 +467,8 @@ saveFigure(fig, fullfile(figuresDir, 'rf_link_ber.png'));
 end
 
 function drawSystemDiagrams(figuresDir)
+drawRevisedSystemArchitecture(fullfile(figuresDir, 'system_architecture_revised.png'));
+
 drawBlocks(fullfile(figuresDir, 'system_architecture.png'), ...
     '机器人端远程无线控制系统总体结构', ...
     {'摄像头与视频采集', 'TMS320F28379D DSP', '电机驱动器', '射频集成模块', 'VHF天线'}, ...
@@ -496,6 +498,105 @@ drawBlocks(fullfile(figuresDir, 'software_flow.png'), ...
     {'参数加载', '电机控制仿真', '视频链路仿真', '射频链路仿真', '结果校验', '报告生成'}, ...
     [0.05 0.58 0.17 0.18; 0.29 0.58 0.17 0.18; 0.53 0.58 0.17 0.18; 0.77 0.58 0.17 0.18; 0.29 0.22 0.17 0.18; 0.53 0.22 0.17 0.18], ...
     [1 2; 2 3; 3 4; 4 5; 5 6]);
+end
+
+function drawRevisedSystemArchitecture(filePath)
+fig = figure('Visible', 'off', 'Color', 'w', 'Position', [100 100 1400 760]);
+axis([0 1 0 1]); axis off; hold on;
+
+remote = [0.04 0.42 0.17 0.16];
+channel = [0.26 0.43 0.12 0.14];
+antenna = [0.43 0.43 0.11 0.14];
+rf = [0.61 0.43 0.16 0.14];
+dsp = [0.61 0.69 0.16 0.14];
+driver = [0.83 0.69 0.13 0.14];
+motor = [0.83 0.48 0.13 0.14];
+sensors = [0.83 0.27 0.13 0.14];
+camera = [0.36 0.18 0.13 0.14];
+codec = [0.55 0.18 0.21 0.14];
+
+rectangle('Position', [0.30 0.08 0.67 0.84], 'Curvature', 0.01, ...
+    'EdgeColor', [0.70 0.70 0.70], 'LineStyle', '--', 'LineWidth', 1.1);
+text(0.32, 0.89, '机器人端', 'FontName', 'SimSun', 'FontSize', 12, 'FontWeight', 'bold');
+set(findobj(gca, 'String', '机器人端'), 'Color', [0.20 0.20 0.20]);
+text(0.04, 0.63, '远程端', 'FontName', 'SimSun', 'FontSize', 12, ...
+    'FontWeight', 'bold', 'Color', [0.20 0.20 0.20]);
+
+drawDiagramBox(remote, {'远程控制端', '地面站/监控端'}, [0.90 0.95 1.00]);
+drawDiagramBox(channel, {'VHF无线信道', '40-200 MHz'}, [0.97 0.97 0.91]);
+drawDiagramBox(antenna, {'机器人端', 'VHF天线'}, [0.94 0.96 0.88]);
+drawDiagramBox(rf, {'射频收发模块', '调制/解调/滤波'}, [0.90 0.96 0.92]);
+drawDiagramBox(dsp, {'TMS320F28379D', 'DSP控制核心'}, [0.88 0.93 0.99]);
+drawDiagramBox(driver, {'电机驱动器', '隔离驱动+功率桥'}, [0.98 0.92 0.86]);
+drawDiagramBox(motor, {'电机/执行机构', '机器人运动'}, [0.98 0.96 0.86]);
+drawDiagramBox(sensors, {'传感反馈', 'ADC采样/QEP编码器'}, [0.92 0.90 0.98]);
+drawDiagramBox(camera, {'CMOS摄像头', '图像采集'}, [0.91 0.96 0.99]);
+drawDiagramBox(codec, {'视频采集/编码/帧缓存', 'H.264 + SDRAM/FIFO'}, [0.94 0.98 0.94]);
+
+drawEdgeArrow(remote, channel, '控制命令下行', [0 0.035], [0.12 0.25 0.48], '-', 0.018);
+drawEdgeArrow(channel, remote, '视频/遥测上行', [0 -0.040], [0.12 0.25 0.48], '-', 0.018);
+drawEdgeArrow(channel, antenna, '', [0 0], [0.12 0.25 0.48], '-', 0.012);
+drawEdgeArrow(antenna, channel, '', [0 0], [0.12 0.25 0.48], '-', 0.012);
+drawEdgeArrow(antenna, rf, '收发射频信号', [0 0.035], [0.20 0.35 0.20], '-', 0);
+
+drawEdgeArrow(rf, dsp, '控制包/链路状态', [0.09 0.00], [0.20 0.35 0.20], '-', -0.025);
+drawEdgeArrow(dsp, rf, '频点/功率配置', [-0.09 0.00], [0.20 0.35 0.20], '--', 0.025);
+drawEdgeArrow(dsp, driver, 'PWM/故障控制', [0 0.035], [0.45 0.24 0.10], '-', 0);
+drawEdgeArrow(driver, motor, '驱动功率', [0.055 0], [0.45 0.24 0.10], '-', 0);
+drawEdgeArrow(motor, sensors, '电流/电压/速度', [0.070 0], [0.45 0.24 0.10], '-', 0);
+drawPolylineArrow([0.83 0.34; 0.79 0.34; 0.79 0.76; 0.77 0.76], '闭环反馈', [-0.06 0.02], [0.45 0.24 0.10], '-');
+
+drawEdgeArrow(camera, codec, '原始视频', [0 0.035], [0.10 0.38 0.50], '-', 0);
+drawEdgeArrow(codec, rf, '压缩码流', [0.065 0.015], [0.10 0.38 0.50], '-', 0);
+drawEdgeArrow(dsp, codec, '配置/缓存监测', [-0.09 -0.02], [0.25 0.25 0.25], '--', 0);
+
+saveFigure(fig, filePath);
+end
+
+function drawDiagramBox(pos, label, colorValue)
+rectangle('Position', pos, 'Curvature', 0.04, 'FaceColor', colorValue, ...
+    'EdgeColor', [0.22 0.22 0.22], 'LineWidth', 1.1);
+cx = pos(1) + pos(3)/2;
+cy = pos(2) + pos(4)/2;
+text(cx, cy, label, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', ...
+    'FontName', 'SimSun', 'FontSize', 11, 'Color', [0.05 0.05 0.05], 'Interpreter', 'none');
+end
+
+function drawEdgeArrow(fromRect, toRect, label, labelOffset, colorValue, lineStyle, offset)
+fromCenter = [fromRect(1)+fromRect(3)/2, fromRect(2)+fromRect(4)/2];
+toCenter = [toRect(1)+toRect(3)/2, toRect(2)+toRect(4)/2];
+a = edgePoint(fromRect, fromCenter, toCenter, 0.010);
+b = edgePoint(toRect, toCenter, fromCenter, 0.010);
+delta = b - a;
+normValue = sqrt(delta(1)^2 + delta(2)^2);
+if normValue > 1e-9 && abs(offset) > 0
+    normal = [-delta(2), delta(1)] / normValue;
+    a = a + offset * normal;
+    b = b + offset * normal;
+end
+quiver(a(1), a(2), b(1)-a(1), b(2)-a(2), 0, 'Color', colorValue, ...
+    'LineWidth', 1.2, 'LineStyle', lineStyle, 'MaxHeadSize', 0.16);
+if ~isempty(label)
+    mid = (a + b) / 2 + labelOffset;
+    text(mid(1), mid(2), label, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', ...
+        'FontName', 'SimSun', 'FontSize', 9.5, 'Color', colorValue, ...
+        'BackgroundColor', 'w', 'Margin', 1, 'Interpreter', 'none');
+end
+end
+
+function drawPolylineArrow(points, label, labelOffset, colorValue, lineStyle)
+plot(points(1:end-1,1), points(1:end-1,2), 'Color', colorValue, ...
+    'LineWidth', 1.2, 'LineStyle', lineStyle);
+a = points(end-1, :);
+b = points(end, :);
+quiver(a(1), a(2), b(1)-a(1), b(2)-a(2), 0, 'Color', colorValue, ...
+    'LineWidth', 1.2, 'LineStyle', lineStyle, 'MaxHeadSize', 0.16);
+if ~isempty(label)
+    mid = points(2, :) + labelOffset;
+    text(mid(1), mid(2), label, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', ...
+        'FontName', 'SimSun', 'FontSize', 9.5, 'Color', colorValue, ...
+        'BackgroundColor', 'w', 'Margin', 1, 'Interpreter', 'none');
+end
 end
 
 function drawBlocks(filePath, titleText, labels, positions, edges)
